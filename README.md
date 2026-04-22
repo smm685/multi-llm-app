@@ -1,17 +1,20 @@
 ## Routing Table
 
+\```javascript
 app.post('/api/query', queryHandler);
 app.get('/api/history', historyHandler);
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
+\```
 
 ## Database Design
 
-MongoDB database: dbs
-Collection: queries
+MongoDB database: dbs  
+Collection: queries  
 
 Each document:
+\```javascript
 {
     _id: ObjectId('...'),
     prompt: "What is the capital of France?",
@@ -23,3 +26,4 @@ Each document:
     ],
     createdAt: 2026-04-23T00:00:00.000Z
 }
+\```
