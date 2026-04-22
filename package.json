@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "node server.js",
+    "test:unit": "jasmine",
+    "test:e2e": "node tests/e2e.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,5 +19,10 @@
     "express-session": "^1.19.0",
     "mongodb": "^7.2.0",
     "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "cucumber": "^6.0.7",
+    "jasmine": "^6.2.0",
+    "puppeteer": "^24.42.0"
   }
 }
