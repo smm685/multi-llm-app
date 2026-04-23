@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-LLM App - Query</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Multi-LLM Query</h1>
+        <p>Select which models to query and enter your prompt below.</p>
+
+        <div class="llm-selection">
+            <h3>Select LLMs:</h3>
+            <label><input type="checkbox" id="phi3" value="phi3" checked> phi3</label>
+            <label><input type="checkbox" id="mistral" value="mistral" checked> mistral</label>
+            <label><input type="checkbox" id="gemma3" value="gemma3:1b" checked> gemma3</label>
+        </div>
+
+        <div class="prompt-area">
+            <textarea id="promptInput" placeholder="Enter your prompt here..." maxlength="1000"></textarea>
+            <p id="charCount">0 / 1000 characters</p>
+            <p id="errorMessage" style="color:red;"></p>
+            <button class="btn-primary" onclick="submitPrompt()">Submit</button>
+        </div>
+    </div>
+    <script src="client.js"></script>
+</body>
+</html>
