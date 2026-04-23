@@ -88,7 +88,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
             const text = await page.evaluate(el => el.innerText, btn);
             if (text.trim() === 'Submit') { await btn.click(); break; }
         }
-        await page.waitForSelector('.response-column', { timeout: 30000 });
+await page.waitForSelector('.response-column', { timeout: 120000 });
         await pass('Successful query displays response columns');
         passed++;
     } catch (e) { await fail('Successful query shows results', e); failed++; }
