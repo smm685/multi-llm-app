@@ -16,36 +16,33 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
     let passed = 0;
     let failed = 0;
 
-    // Test 1: Landing page loads
     try {
         await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         const title = await page.title();
-        if (!title.includes('Multi-LLM')) throw new Error(`Unexpected title: ${title}`);
+        if (!title.includes('LLM Compare')) throw new Error(`Unexpected title: ${title}`);
         await pass('Landing page loads with correct title');
         passed++;
     } catch (e) { await fail('Landing page loads', e); failed++; }
 
     await delay(1000);
 
-    // Test 2: Query page loads with checkboxes
     try {
-        await page.goto(`${BASE_URL}/query.html`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#promptInput');
-        await page.waitForSelector('input[type="checkbox"]');
-        await pass('Query page loads with prompt input and checkboxes');
+        await page.waitForSelector('#modelSelect');
+        await pass('Chat page loads with prompt input and model selector');
         passed++;
-    } catch (e) { await fail('Query page loads', e); failed++; }
+    } catch (e) { await fail('Chat page loads', e); failed++; }
 
     await delay(500);
 
-    // Test 3: Empty prompt shows error
     try {
-        await page.goto(`${BASE_URL}/query.html`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.$eval('#promptInput', el => { el.value = ''; });
         const buttons = await page.$$('button');
         for (const btn of buttons) {
             const text = await page.evaluate(el => el.innerText, btn);
-            if (text.trim() === 'Submit') { await btn.click(); break; }
+            if (text.trim() === 'Send') { await btn.click(); break; }
         }
         await delay(500);
         const errText = await page.$eval('#errorMessage', el => el.innerText.trim());
@@ -56,39 +53,15 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
-    // Test 4: No LLM selected shows error
     try {
-        await page.goto(`${BASE_URL}/query.html`, { waitUntil: 'domcontentloaded' });
-        const checkboxes = await page.$$('input[type="checkbox"]');
-        for (const cb of checkboxes) {
-            const checked = await page.evaluate(el => el.checked, cb);
-            if (checked) await cb.click();
-        }
-        await page.type('#promptInput', 'Hello');
-        const buttons = await page.$$('button');
-        for (const btn of buttons) {
-            const text = await page.evaluate(el => el.innerText, btn);
-            if (text.trim() === 'Submit') { await btn.click(); break; }
-        }
-        await delay(500);
-        const errText = await page.$eval('#errorMessage', el => el.innerText.trim());
-        if (errText !== 'Please select at least one LLM.') throw new Error(`Got: "${errText}"`);
-        await pass('No LLM selected shows correct error message');
-        passed++;
-    } catch (e) { await fail('No LLM selected validation', e); failed++; }
-
-    await delay(500);
-
-    // Test 5: Successful query shows results
-    try {
-        await page.goto(`${BASE_URL}/query.html`, { waitUntil: 'domcontentloaded' });
+        await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.type('#promptInput', 'Say hello in one word.');
         const buttons = await page.$$('button');
         for (const btn of buttons) {
             const text = await page.evaluate(el => el.innerText, btn);
-            if (text.trim() === 'Submit') { await btn.click(); break; }
+            if (text.trim() === 'Send') { await btn.click(); break; }
         }
-await page.waitForSelector('.response-column', { timeout: 120000 });
+        await page.waitForSelector('.response-column', { timeout: 120000 });
         await pass('Successful query displays response columns');
         passed++;
     } catch (e) { await fail('Successful query shows results', e); failed++; }

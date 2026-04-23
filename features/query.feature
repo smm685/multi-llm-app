@@ -1,43 +1,36 @@
-Feature: Multi-LLM Query
+Feature: LLM Compare Chat
   As a user
   I want to submit a prompt to multiple LLMs at once
   So that I can compare their responses side by side
 
   Scenario: Landing page loads correctly
     Given I navigate to the home page
-    Then the page title should contain "Multi-LLM"
-    And I should see a "Get Started" button
+    Then the page title should contain "LLM Compare"
+    And I should see a "Start" button
 
   Scenario: Successful prompt submission to multiple LLMs
-    Given I am on the query page
-    And I have checked "phi3" and "mistral"
+    Given I am on the chat page
     When I type "What is the capital of France?" in the prompt box
-    And I click the "Submit" button
-    Then I should be taken to the results page
-    And I should see at least 2 response columns
+    And I click the "Send" button
+    Then I should see at least 2 response columns on the same page
 
   Scenario: Submit fails when prompt is empty
-    Given I am on the query page
-    And I have checked "phi3"
+    Given I am on the chat page
     When I leave the prompt box empty
-    And I click the "Submit" button
+    And I click the "Send" button
     Then I should see an error message "Please enter a prompt."
 
   Scenario: Submit fails when no LLM is selected
-    Given I am on the query page
-    And I have unchecked all LLMs
+    Given I am on the chat page
+    And I have deselected all models
     When I type "Hello" in the prompt box
-    And I click the "Submit" button
+    And I click the "Send" button
     Then I should see an error message "Please select at least one LLM."
 
-  Scenario: User can select and deselect LLMs
-    Given I am on the query page
-    Then I should see checkboxes for "phi3", "mistral", and "gemma3"
-    When I uncheck "mistral"
-    And I check "gemma3"
-    Then "gemma3" should be checked
-    And "mistral" should be unchecked
+  Scenario: Models are available in the selector
+    Given I am on the chat page
+    Then I should see phi3, mistral, and gemma3 as options
 
-  Scenario: At least one LLM is checked by default
-    Given I am on the query page
-    Then at least one LLM checkbox should be checked by default
+  Scenario: At least one model is selected by default
+    Given I am on the chat page
+    Then at least one model should be selected by default

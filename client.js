@@ -3,24 +3,25 @@ async function submitPrompt() {
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.innerText = '';
 
-    // Validate prompt
     if (!prompt || prompt.trim() === '') {
         errorMessage.innerText = 'Please enter a prompt.';
         return;
     }
 
-    // Get selected models
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-    const models = Array.from(checkboxes).map(cb => cb.value);
+    const select = document.getElementById('modelSelect');
+    const models = Array.from(select.options).map(o => o.value);
 
-    // Validate models
     if (models.length === 0) {
         errorMessage.innerText = 'Please select at least one LLM.';
         return;
     }
 
-    // Show loading state
-    const button = document.querySelector('button');
+    const container = document.getElementById('responsesContainer');
+    const promptDisplay = document.getElementById('promptDisplay');
+    container.innerHTML = '<p class="loading">Loading responses...</p>';
+    promptDisplay.innerText = 'Prompt: ' + prompt;
+
+    const button = document.querySelector('.query-input-row .btn-primary');
     button.innerText = 'Loading...';
     button.disabled = true;
 
@@ -35,30 +36,62 @@ async function submitPrompt() {
 
         if (data.error) {
             errorMessage.innerText = data.error;
-            button.innerText = 'Submit';
+            container.innerHTML = '';
+            button.innerText = 'Send';
             button.disabled = false;
             return;
         }
 
-        // Save results to localStorage and redirect
-        localStorage.setItem('llmResults', JSON.stringify(data.responses));
-        localStorage.setItem('llmPrompt', prompt);
-        window.location.href = 'results.html';
+        container.innerHTML = '';
+        data.responses.forEach(r => {
+            const col = document.createElement('div');
+            col.className = 'response-column';
+            col.innerHTML = `<h3>${r.model}</h3><p>${r.text}</p>`;
+            container.appendChild(col);
+        });
+
+        addToHistory(prompt);
+        document.getElementById('promptInput').value = '';
+        button.innerText = 'Send';
+        button.disabled = false;
 
     } catch (err) {
         errorMessage.innerText = 'Something went wrong. Please try again.';
-        button.innerText = 'Submit';
+        container.innerHTML = '';
+        button.innerText = 'Send';
         button.disabled = false;
     }
 }
 
-// Character counter
+function clearResults() {
+    document.getElementById('responsesContainer').innerHTML = '<p style="color:#aaa;">Your responses will appear here.</p>';
+    document.getElementById('promptDisplay').innerText = '';
+    document.getElementById('promptInput').value = '';
+    document.getElementById('errorMessage').innerText = '';
+}
+
+function addToHistory(prompt) {
+    const list = document.getElementById('historyList');
+    const existing = list.querySelector('p');
+    if (existing) existing.remove();
+
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerText = prompt.length > 50 ? prompt.substring(0, 50) + '...' : prompt;
+    item.onclick = () => {
+        document.getElementById('promptInput').value = prompt;
+    };
+    list.prepend(item);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('promptInput');
-    const counter = document.getElementById('charCount');
-    if (input && counter) {
-        input.addEventListener('input', () => {
-            counter.innerText = `${input.value.length} / 1000 characters`;
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitPrompt();
+            }
         });
     }
 });

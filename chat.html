@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Compare - Chat</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <nav>
+        <div class="heading">LLM Compare</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="chat.html">Chat</a></li>
+        </ul>
+    </nav>
+
+    <div class="query-page">
+        <aside class="query-sidebar">
+            <h2>Chat History</h2>
+            <div id="historyList" class="history-list">
+                <p style="color:#555; font-size:0.9rem;">No chats yet.</p>
+            </div>
+        </aside>
+
+        <main class="query-main">
+            <div class="query-header">
+                <h1>Ask Multiple Models</h1>
+                <button class="btn-primary" onclick="clearResults()">New Chat</button>
+            </div>
+
+            <div class="responses-area">
+                <div id="promptDisplay"></div>
+                <div id="responsesContainer" class="responses-grid">
+                    <p style="color:#aaa;">Your responses will appear here.</p>
+                </div>
+            </div>
+
+            <p id="errorMessage"></p>
+
+            <div class="query-input-row">
+                <select id="modelSelect" multiple size="1">
+                    <option value="phi3" selected>phi3</option>
+                    <option value="mistral" selected>mistral</option>
+                    <option value="gemma3:1b" selected>gemma3</option>
+                </select>
+                <input type="text" id="promptInput" placeholder="Type your question here..." maxlength="1000">
+                <button class="btn-primary" onclick="submitPrompt()">Send</button>
+            </div>
+        </main>
+    </div>
+    <script src="client.js"></script>
+</body>
+</html>

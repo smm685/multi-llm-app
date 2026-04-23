@@ -1,12 +1,11 @@
-# Multi-LLM App
+# LLM Compare
 
-A web application that sends a single prompt to multiple LLMs simultaneously and displays responses side by side.
+A web app that sends a single prompt to multiple AI models at the same time and displays responses side by side.
 
 ## Routing Table
 
 ```javascript
 app.post('/api/query', queryHandler);
-app.get('/api/history', historyHandler);
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });
@@ -14,21 +13,35 @@ app.listen(PORT, () => {
 
 ## Database Design
 
-MongoDB database: dbs  
-Collection: queries  
+Chat history is stored in the browser using localStorage. No server-side database is used.
 
-Each document:
+## Installation
 
-```javascript
-{
-    _id: ObjectId('...'),
-    prompt: "What is the capital of France?",
-    models: ["phi3", "mistral", "gemma3"],
-    responses: [
-        { model: "phi3", text: "Paris." },
-        { model: "mistral", text: "The capital of France is Paris." },
-        { model: "gemma3", text: "Paris is the capital of France." }
-    ],
-    createdAt: 2026-04-23T00:00:00.000Z
-}
-```
+1. Clone the repository:
+git clone https://github.com/smm685/multi-llm-app.gitcd multi-llm-app
+
+2. Install dependencies:
+
+3. Install Ollama from https://ollama.com
+
+4. Pull the required models:
+ollama pull phi3
+ollama pull mistral
+ollama pull gemma3
+
+## Running the App
+
+1. Start Ollama:
+ollama run phi3
+
+2. In a new terminal start the server:
+node server.js
+
+3. Open browser and go to:
+http://localhost:8080
+
+## Running Unit Tests
+npm run test:unit
+
+## Running Puppeteer Tests
+npm run test:e2e
