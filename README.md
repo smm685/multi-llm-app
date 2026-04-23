@@ -12,8 +12,15 @@ app.listen(PORT, () => {
 ```
 
 ## Database Design
+Key: llmResults
+Value: [
+    { model: "phi3", text: "response text here" },
+    { model: "mistral", text: "response text here" },
+    { model: "gemma3", text: "response text here" }
+]
 
-Chat history is stored in the browser using localStorage. No server-side database is used.
+Key: llmPrompt
+Value: "What is the capital of France?"
 
 ## Installation
 
