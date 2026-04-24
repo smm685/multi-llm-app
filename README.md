@@ -53,19 +53,20 @@ node server.js
 
 3. Open browser and go to: http://localhost:8080
 
-## Running Unit Tests
+##  Unit Tests
 
-1. Run: npm run test:unit
-2. esults 
+1. Run: 
+npm run test:unit
+2. Results 
 
 
-## Running Puppeteer Tests
+##  Puppeteer Tests
 1. Run: npm run test:e2e
 2. A browser window will open and automatically click through the app
 3. Results 
 
 
-## Running Cucumber Acceptance Tests
+##  Cucumber Acceptance Tests
 
 1. Run: npm run test:cucumber
 2. Results 

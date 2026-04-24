@@ -16,7 +16,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
     let passed = 0;
     let failed = 0;
 
-    // Test 1: Landing page loads
+    // Test 1
     try {
         await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         const title = await page.title();
@@ -27,7 +27,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(1000);
 
-    // Test 2: Chat page loads
+    // Test 2
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#promptInput');
@@ -38,7 +38,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
-    // Test 3: Empty prompt error
+    // Test 3
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.$eval('#promptInput', el => { el.value = ''; });
@@ -56,7 +56,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
-    // Test 4: No LLM selected error
+    // Test 4
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.evaluate(() => {
@@ -78,7 +78,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
-    // Test 5: Successful query shows response columns
+    // Test 5
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.type('#promptInput', 'Say hello in one word.');
