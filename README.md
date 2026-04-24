@@ -13,8 +13,6 @@ app.listen(PORT, () => {
 
 ## Database Design
 
-Chat history is persisted in the browser using localStorage under the key `llmChatHistory`. Each entry is stored as a JSON object:
-
 ```javascript
 [
     {
@@ -57,14 +55,19 @@ node server.js
 
 ## Running Unit Tests
 
-npm run test:unit
+1. Run: npm run test:unit
+2. esults 
+
 
 ## Running Puppeteer Tests
-npm run test:e2e
+1. Run: npm run test:e2e
+2. A browser window will open and automatically click through the app
+3. Results 
+
 
 ## Running Cucumber Acceptance Tests
 
-1. Make sure the server is running: `node server.js`
-2. Run: `npm run test:cucumber`
-3. Results will show passed and failed scenarios in the terminal
+1. Run: npm run test:cucumber
+2. Results 
+
 
