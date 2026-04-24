@@ -1,3 +1,15 @@
+const STORAGE_KEY = 'llmChatHistory';
+
+function saveToLocalStorage(prompt, responses) {
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    history.unshift({ prompt, responses, createdAt: new Date().toISOString() });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+}
+
+function loadFromLocalStorage() {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+}
+
 async function submitPrompt() {
     const prompt = document.getElementById('promptInput').value;
     const errorMessage = document.getElementById('errorMessage');
@@ -9,7 +21,8 @@ async function submitPrompt() {
     }
 
     const select = document.getElementById('modelSelect');
-const models = Array.from(select.options).filter(o => o.selected).map(o => o.value);
+    const models = Array.from(select.options).filter(o => o.selected).map(o => o.value);
+
     if (models.length === 0) {
         errorMessage.innerText = 'Please select at least one LLM.';
         return;
@@ -49,6 +62,9 @@ const models = Array.from(select.options).filter(o => o.selected).map(o => o.val
             container.appendChild(col);
         });
 
+        saveToLocalStorage(prompt, data.responses);
+        renderHistory();
+
         addToHistory(prompt);
         document.getElementById('promptInput').value = '';
         button.innerText = 'Send';
@@ -83,7 +99,27 @@ function addToHistory(prompt) {
     list.prepend(item);
 }
 
+function renderHistory() {
+    const history = loadFromLocalStorage();
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+    if (history.length === 0) {
+        list.innerHTML = '<p style="color:#555; font-size:0.9rem;">No chats yet.</p>';
+        return;
+    }
+    history.forEach(entry => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerText = entry.prompt.length > 50 ? entry.prompt.substring(0, 50) + '...' : entry.prompt;
+        item.onclick = () => {
+            document.getElementById('promptInput').value = entry.prompt;
+        };
+        list.prepend(item);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    renderHistory();
     const input = document.getElementById('promptInput');
     if (input) {
         input.addEventListener('keydown', (e) => {

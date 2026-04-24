@@ -13,10 +13,7 @@ app.listen(PORT, () => {
 
 ## Database Design
 
-Chat history is stored in the browser using localStorage. No server-side database is used.
 
-Key: llmResults
-Value:
 ```javascript
 [
     { model: "phi3", text: "response text here" },
@@ -25,9 +22,6 @@ Value:
 ]
 ```
 
-Key: llmPrompt  
-Value: "What is the capital of France?"
-## Installation
 
 1. Clone the repository:
 git clone https://github.com/smm685/multi-llm-app.gitcd multi-llm-app
