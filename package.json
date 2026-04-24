@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "test:unit": "jasmine",
-    "test:e2e": "node tests/e2e.js"
-},
+    "test:e2e": "node tests/e2e.js",
+    "test:cucumber": "cucumber-js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,7 +22,7 @@
     "node-fetch": "^2.7.0"
   },
   "devDependencies": {
-    "cucumber": "^6.0.7",
+    "@cucumber/cucumber": "^10.0.0",
     "jasmine": "^6.2.0",
     "puppeteer": "^24.42.0"
   }

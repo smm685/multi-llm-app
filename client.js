@@ -9,8 +9,7 @@ async function submitPrompt() {
     }
 
     const select = document.getElementById('modelSelect');
-    const models = Array.from(select.options).map(o => o.value);
-
+const models = Array.from(select.options).filter(o => o.selected).map(o => o.value);
     if (models.length === 0) {
         errorMessage.innerText = 'Please select at least one LLM.';
         return;

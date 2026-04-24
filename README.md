@@ -57,3 +57,8 @@ npm run test:unit
 
 ## Running Puppeteer Tests
 npm run test:e2e
+
+## Running Cucumber Acceptance Tests
+1. Make sure the server is running: `node server.js`
+2. Run: `npm run test:cucumber`
+3. Results will show passed and failed scenarios in the terminal

@@ -16,6 +16,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
     let passed = 0;
     let failed = 0;
 
+    // Test 1: Landing page loads
     try {
         await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
         const title = await page.title();
@@ -26,6 +27,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(1000);
 
+    // Test 2: Chat page loads
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.waitForSelector('#promptInput');
@@ -36,6 +38,7 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
+    // Test 3: Empty prompt error
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.$eval('#promptInput', el => { el.value = ''; });
@@ -53,6 +56,29 @@ async function fail(label, err) { console.error(`  ✗  ${label}\n     ${err.mes
 
     await delay(500);
 
+    // Test 4: No LLM selected error
+    try {
+        await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
+        await page.evaluate(() => {
+            const select = document.querySelector('#modelSelect');
+            Array.from(select.options).forEach(opt => { opt.selected = false; });
+        });
+        await page.type('#promptInput', 'Hello');
+        const buttons = await page.$$('button');
+        for (const btn of buttons) {
+            const text = await page.evaluate(el => el.innerText, btn);
+            if (text.trim() === 'Send') { await btn.click(); break; }
+        }
+        await delay(500);
+        const errText = await page.$eval('#errorMessage', el => el.innerText.trim());
+        if (!errText.includes('Please select at least one LLM')) throw new Error(`Got: "${errText}"`);
+        await pass('No LLM selected shows correct error message');
+        passed++;
+    } catch (e) { await fail('No LLM selected validation', e); failed++; }
+
+    await delay(500);
+
+    // Test 5: Successful query shows response columns
     try {
         await page.goto(`${BASE_URL}/chat.html`, { waitUntil: 'domcontentloaded' });
         await page.type('#promptInput', 'Say hello in one word.');
